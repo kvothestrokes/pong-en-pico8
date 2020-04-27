@@ -1,0 +1,118 @@
+//AndréCMS
+pl={}
+en={}
+pts={}
+ball={}
+ball.x=64
+ball.y=64
+ball.v=0
+acc=2
+ball.dire=acc
+pts.p1=0
+pts.en=0
+
+function _init()
+	start()
+end
+
+function start()
+	pl.x=5
+	pl.y=55
+	en.x=128-5
+	en.y=70
+	ball.x=64
+	ball.y=64
+	ball.v=0
+end
+
+function _update()
+	cls()
+	dibutablero()
+	ia()
+	if(btn(2)) then
+		pl.y-=2
+	end
+	if(btn(3)) then
+		pl.y+=2
+	end
+	if ball.x<=0 then
+		pts.en+=1
+		acc+=1
+		start()
+	end
+	if ball.x>=128 then
+		pts.p1+=1
+		acc+=1
+		start()
+	end
+	
+	if pl.y<=11 then
+		pl.y=11
+	end
+	if pl.y+10>=125then
+		pl.y=115
+	end
+	if en.y-10<=12 then
+		en.y=11+10
+	end
+	if en.y>=125 then
+		en.y=125
+	end
+	
+end
+
+function _draw()
+	rectfill(pl.x,pl.y,pl.x+1,pl.y+10,8)
+	rectfill(en.x,en.y,en.x-1,en.y-10,8)
+	print(pget(ball.x,ball.y),0,0)
+	print(pget(ball.x,ball.y))
+	point()
+end
+
+function dibutablero()
+	rect(0,10,128,10,7)
+	rect(0,126,128,126,7)
+	ml=-10
+	for i=0,128,5 do
+		rect(62,i,65, ml)
+		ml+=15
+	end
+	print(pts.p1,64-10,20,7)
+	print(pts.en,64+8,20,7)
+end
+
+function point()
+	ydir=0
+	if(pget(ball.x,ball.y))==8 then
+		ball.dire*=-1
+		rny=rnd(5)
+		if rny>3 then
+			rny=-1
+		else
+			rny=1
+		end
+
+		ydir=rnd(1)
+		ball.v=rnd(2)
+		ball.v*=rny
+		sfx(1)
+	end
+	if ball.y<=10 or ball.y>=126 then
+		ball.v*=-1
+		sfx(2)
+	end
+	
+	ball.x+=ball.dire
+	ball.y+=ball.v
+	pset(ball.x,ball.y,7)
+
+end
+
+function ia()
+	if ball.y<en.y then
+		en.y-=2
+	end
+	if ball.y>en.y then
+		en.y+=2
+	end
+end
